@@ -1,0 +1,13 @@
+services:
+  redis:
+    image: 'redis:latest'
+    ports:
+      - '6379'
+  spring-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 8080:8080
+    depends_on:
+      - redis
