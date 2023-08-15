@@ -1,0 +1,29 @@
+name: Build and Deploy
+
+on:
+  workflow_dispatch: # This allows manual triggering
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up JDK
+        uses: actions/setup-java@v2
+        with:
+          java-version: '17' # Adjust this to your Java version
+
+      - name: Build JAR
+        run: mvn package
+
+      - name: Deploy to Dev1 Server
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.DEV1_SERVER_HOST}}
+          username: ${{ secrets.DEV1_SERVER_USERNAME }}
+          key: ${{ secrets.DEV1_SERVER_PRIVATE_KEY }}
+          source: "target/assignmentprojet-app.jar" # Adjust the path to your JAR file
+          target: "/path/on/dev1/server/destination/assignmentprojet-app.jar"
